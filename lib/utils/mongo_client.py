@@ -10,14 +10,10 @@ class MongoDBClient:
         self.db = self.client[Configs.DB_NAME]
         self.collection = self.db[Configs.DB_COLLECTION_NAME]
         self.__connnect()
-
-
         self.existing_topics = [str(value) for value in self.collection.distinct(DBConstants.TOPIC)]
-        print(self.existing_topics)
-    def __connnect(self):
-        # Send a ping to confirm a successful connection
-        try:
 
+    def __connnect(self):
+        try:
             self.db.command('ping')
             self.logger.info("Pinged your deployment. You successfully connected to MongoDB!")
         except Exception as e:
