@@ -46,11 +46,12 @@ async def get_spesificied_floor(floor:str) -> List[Dict]:
 
 # display list of desks spesified by a table
 @app.get("/api/{floor}/{desk}")
-async def get_spesific_floor(floor:str, desk:str) -> List[Dict]:
-    topic = floor+"/"+desk
-    documents = list(app.controller.mongo_client.collection.find({}, {"_id":0, "TOPIC":topic}))
+async def get_spesific_floor(floor:str, desk:str) -> List[FloorModel]:
+    pattern = f'^{floor+"/"+desk}'
+    print(pattern)
+    documents = list(app.controller.mongo_client.collection.find({"TOPIC": {"$regex": pattern}}))
 
     if documents:
         return documents
     else:
-        return {"error": "No documents found"}
+        return []
